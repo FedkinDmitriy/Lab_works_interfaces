@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            label4 = new Label();
+            textBox_size2 = new TextBox();
             radioButton3 = new RadioButton();
             radioButton2 = new RadioButton();
             label3 = new Label();
@@ -47,6 +49,8 @@
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.GradientActiveCaption;
+            groupBox1.Controls.Add(label4);
+            groupBox1.Controls.Add(textBox_size2);
             groupBox1.Controls.Add(radioButton3);
             groupBox1.Controls.Add(radioButton2);
             groupBox1.Controls.Add(label3);
@@ -57,12 +61,28 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(textBox_counter);
             groupBox1.Dock = DockStyle.Right;
-            groupBox1.Location = new Point(634, 0);
+            groupBox1.Location = new Point(624, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(160, 594);
+            groupBox1.Size = new Size(170, 594);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Меню";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(25, 420);
+            label4.Name = "label4";
+            label4.Size = new Size(43, 15);
+            label4.TabIndex = 7;
+            label4.Text = "Height";
+            // 
+            // textBox_size2
+            // 
+            textBox_size2.Location = new Point(110, 417);
+            textBox_size2.Name = "textBox_size2";
+            textBox_size2.Size = new Size(48, 23);
+            textBox_size2.TabIndex = 6;
             // 
             // radioButton3
             // 
@@ -89,11 +109,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(21, 343);
+            label3.Location = new Point(25, 378);
             label3.Name = "label3";
-            label3.Size = new Size(15, 15);
+            label3.Size = new Size(39, 15);
             label3.TabIndex = 5;
-            label3.Text = "D";
+            label3.Text = "Width";
             // 
             // radioButton1
             // 
@@ -108,7 +128,7 @@
             // 
             // textBox_size
             // 
-            textBox_size.Location = new Point(106, 335);
+            textBox_size.Location = new Point(110, 375);
             textBox_size.Name = "textBox_size";
             textBox_size.Size = new Size(48, 23);
             textBox_size.TabIndex = 4;
@@ -116,7 +136,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(21, 300);
+            label2.Location = new Point(25, 337);
             label2.Name = "label2";
             label2.Size = new Size(13, 15);
             label2.TabIndex = 3;
@@ -124,7 +144,7 @@
             // 
             // textBox_distance
             // 
-            textBox_distance.Location = new Point(106, 292);
+            textBox_distance.Location = new Point(110, 329);
             textBox_distance.Name = "textBox_distance";
             textBox_distance.Size = new Size(48, 23);
             textBox_distance.TabIndex = 2;
@@ -132,15 +152,15 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(21, 387);
+            label1.Location = new Point(25, 463);
             label1.Name = "label1";
-            label1.Size = new Size(67, 15);
+            label1.Size = new Size(33, 15);
             label1.TabIndex = 1;
-            label1.Text = "Experiment";
+            label1.Text = "Click";
             // 
             // textBox_counter
             // 
-            textBox_counter.Location = new Point(106, 379);
+            textBox_counter.Location = new Point(110, 455);
             textBox_counter.Name = "textBox_counter";
             textBox_counter.Size = new Size(48, 23);
             textBox_counter.TabIndex = 0;
@@ -151,7 +171,7 @@
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
             statusStrip1.Location = new Point(0, 572);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(634, 22);
+            statusStrip1.Size = new Size(624, 22);
             statusStrip1.TabIndex = 1;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -195,5 +215,7 @@
         private RadioButton radioButton1;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
+        private Label label4;
+        private TextBox textBox_size2;
     }
 }

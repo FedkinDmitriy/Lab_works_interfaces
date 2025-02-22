@@ -1,62 +1,104 @@
-
+п»ї
 using System.Diagnostics;
+
 
 namespace Lab_i1
 {
     public partial class FormMain : Form
     {
-        private readonly int FixSize = 7; // для первой серии
-        private readonly int FixDistance = 300; // для второй серии 
-        private readonly int[] S = [0, 20, 40, 60, 100, 150, 200, 250, 300, 350]; //массив дистанций
-        private readonly int[] D = [8, 10, 12, 15, 20, 30, 50, 70, 100]; //массив размеров
+        private const int FixSize = 7; // РґР»СЏ РїРµСЂРІРѕР№ СЃРµСЂРёРё
+        private const int FixDistance = 300; // РґР»СЏ РІС‚РѕСЂРѕР№ СЃРµСЂРёРё 
+        private readonly int[] S = [0, 20, 40, 60, 100, 150, 200, 250, 300, 350]; //РјР°СЃСЃРёРІ РґРёСЃС‚Р°РЅС†РёР№
+        private readonly int[] D = [8, 10, 12, 15, 20, 30, 50, 70, 100]; //РјР°СЃСЃРёРІ СЂР°Р·РјРµСЂРѕРІ
 
-        private Panel targetRectangle; // Прямоугольник-мишень
+        private Panel targetRectangle; // РџСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє-РјРёС€РµРЅСЊ
 
-        int counterClicks = 0; // Количество попаданий
-        int counterS = 0; // Индекс текущего расстояния
+        int counterClicks = 0; // РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРїР°РґР°РЅРёР№
+        int counterS = 0; // РРЅРґРµРєСЃ С‚РµРєСѓС‰РµРіРѕ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ
+        bool isMouseMoving = false; // С„Р»Р°Рі РґР»СЏ РєСѓСЂСЃРѕСЂР°
 
+        Stopwatch timer = new(); // РўР°Р№РјРµСЂ РґР»СЏ РёР·РјРµСЂРµРЅРёСЏ РІСЂРµРјРµРЅРё
+        Random random = new(); // Р”Р»СЏ СЃР»СѓС‡Р°Р№РЅРѕРіРѕ СЂР°Р·РјРµС‰РµРЅРёСЏ РїРѕ РґСѓРіРµ
+        List<double> results = new(); // РҐСЂР°РЅРµРЅРёРµ РІСЂРµРјРµРЅРё РїРѕРїР°РґР°РЅРёР№
 
-        List<double> results = new(); // Хранение времени попаданий
-        Stopwatch timer = new(); // Таймер для измерения времени
-        Random random = new(); // Для случайного размещения по дуге
+        private readonly string FilePath = "results.txt"; // РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РґР»СЏ РїРµСЂРІРѕР№ СЃРµСЂРёРё
+
+        int currentDistance;
+        int currentWeidth;
+        int currentHeight;
 
         public FormMain()
         {
             InitializeComponent();
-            this.KeyPreview = true; // Позволяет форме обрабатывать нажатия клавиш перед передачей элементам
+            this.KeyPreview = true; // РџРѕР·РІРѕР»СЏРµС‚ С„РѕСЂРјРµ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€ РїРµСЂРµРґ РїРµСЂРµРґР°С‡РµР№ СЌР»РµРјРµРЅС‚Р°Рј
             this.KeyDown += FormMain_KeyDown;
+            this.MouseMove += FormMain_MouseMove; // РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ РєСѓСЂСЃРѕСЂР°
 
-            // Создание мишени
+            // РЎРѕР·РґР°РЅРёРµ РјРёС€РµРЅРё
             targetRectangle = new Panel
             {
-                Size = new Size(FixSize, FixSize * 2),
+                Size = new Size(FixSize * 2, FixSize),
                 BackColor = Color.Black,
-                Visible = true
+                Visible = false
             };
-            //targetRectangle.MouseClick += TargetRectangle_MouseClick;
+            targetRectangle.MouseClick += TargetRectangle_MouseClick;
             this.Controls.Add(targetRectangle);
         }
 
+        private void FormMain_MouseMove(object? sender, MouseEventArgs e)
+        {
+            if (!isMouseMoving && (Cursor.Position.X != this.Left || Cursor.Position.Y != this.Top))
+            {
+                timer.Restart();
+                isMouseMoving = true;
+            }
+        }
 
+        private void TargetRectangle_MouseClick(object? sender, MouseEventArgs e)
+        {
+            timer.Stop();
+            double elapsedTime = timer.Elapsed.TotalMilliseconds;
+            results.Add(elapsedTime);
+
+            if (results.Count >= 5)
+            {
+                var time = results.Average();
+                results.Clear();
+
+                if (radioButton1.Checked)
+                {                    
+                    SaveResultsToFile(time, currentDistance);
+                }
+            }
+
+            counterClicks++;
+            textBox_counter.Text = counterClicks.ToString();
+
+            if (counterClicks >= 5)
+            {
+                counterClicks = 0;
+                counterS++;
+            }
+
+            Start_1();
+        }
 
         private void FormMain_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space && radioButton1.Checked || radioButton2.Checked || radioButton3.Checked)
             {
-                //Cursor.Position = new Point(0, 0); // любая точка на экране
-                //Cursor.Position = new Point(this.Location.X + 10, this.Location.Y + 30); // относительно заголовка формы
-
+                //Cursor.Position = new Point(0, 0); // Р»СЋР±Р°СЏ С‚РѕС‡РєР° РЅР° СЌРєСЂР°РЅРµ
+                //Cursor.Position = new Point(this.Location.X + 10, this.Location.Y + 30); // РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Р·Р°РіРѕР»РѕРІРєР° С„РѕСЂРјС‹
+                //Cursor.Position = new Point(this.Left, this.Top);
 
                 if (radioButton1.Checked)
                 {
-                    toolStripStatusLabel1.Text = "Выбрана первая серия экспериментов";
-                    Cursor.Position = new Point(this.Left, this.Top);
-
+                    toolStripStatusLabel1.Text = "Р’С‹Р±СЂР°РЅР° РїРµСЂРІР°СЏ СЃРµСЂРёСЏ СЌРєСЃРїРµСЂРёРјРµРЅС‚РѕРІ";
+                    
                     counterClicks = 0;
                     counterS = 0;
 
-
-
+                    Start_1();
 
                 }
                 else if (radioButton2.Checked)
@@ -70,7 +112,52 @@ namespace Lab_i1
             }
 
         }
+        /// <summary>
+        /// СЃС‚Р°СЂС‚ РїРµСЂРІРѕР№ СЃРµСЂРёРё СЌРєСЃРїРµСЂРёРјРµРЅС‚РѕРІ
+        /// </summary>
+        private void Start_1()
+        {
 
+            if (counterS >= S.Length)
+            {
+                toolStripStatusLabel1.Text =  $"РџРµСЂРІР°СЏ СЃРµСЂРёСЏ Р·Р°РІРµСЂС€РµРЅР°. Р”Р°РЅРЅС‹Рµ Р·Р°РїРёСЃР°РЅС‹ РІ С„Р°Р№Р» {FilePath}";
+                return;
+            }
+
+            textBox_distance.Text = S[counterS].ToString();
+            currentDistance = S[counterS];
+            textBox_size.Text = FixSize.ToString();
+            textBox_size2.Text = (FixSize * 2).ToString();
+
+            Cursor.Position = new Point(this.Left, this.Top);
+
+            //РЈРіРѕР» РѕС‚ 0 РґРѕ  ПЂ / 2 РґР»СЏ 4 - Р№ С‡РµС‚РІРµСЂС‚Рё
+            double angle = random.NextDouble() * (Math.PI / 2);
+            int x = (int)(S[counterS] * Math.Cos(angle));
+            int y = (int)(S[counterS] * Math.Sin(angle));
+
+
+            targetRectangle.Location = new Point(x, y);
+            targetRectangle.Visible = true;
+
+            timer.Restart();
+        }
+
+        /// <summary>
+        /// Р—Р°РїРёСЃС‹РІР°РµС‚ СЂРµР·СѓР»СЊС‚Р°С‚С‹ СЌРєСЃРїРµСЂРёРјРµРЅС‚Р° РІ С„Р°Р№Р».
+        /// </summary>
+        private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize)
+        {
+            try
+            {
+                using StreamWriter writer = File.AppendText(FilePath);
+                writer.WriteLine($"Р”РёСЃС‚Р°РЅС†РёСЏ: {distance}, Р Р°Р·РјРµСЂ: {width} * {height}, РЎСЂРµРґРЅРµРµ РІСЂРµРјСЏ: {avgTime} РјСЃ");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"РћС€РёР±РєР° Р·Р°РїРёСЃРё РІ С„Р°Р№Р»: {ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 }
