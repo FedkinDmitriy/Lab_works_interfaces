@@ -8,7 +8,7 @@ namespace Lab_i1
     {
         private const int FixSize = 7; // для первой серии
         private const int FixDistance = 300; // для второй серии 
-        private readonly int[] S = [0, 20, 40, 60, 100, 150, 200, 250, 300, 350]; //массив дистанций
+        private readonly int[] S = [1, 20, 40, 60, 100, 150, 200, 250, 300, 350]; //массив дистанций (вместо 0 поставил 1)
         private readonly int[] D = [8, 10, 12, 15, 20, 30, 50, 70, 100]; //массив размеров
 
         private Panel targetRectangle; // Прямоугольник-мишень
@@ -24,9 +24,16 @@ namespace Lab_i1
 
         private readonly string FilePath = "results.txt";
 
+        //тех переменные-счётчики
         int currentDistance;
         int currentWidth;
         int currentHeight;
+
+        //Третья серия опытов
+        int counterClicks3 = 0; // Количество кликов в третьей серии
+        int counterS3 = 0; // Индекс текущей дистанции
+        int counterD3 = 0; // Индекс текущего размера
+
 
         public FormMain()
         {
@@ -61,6 +68,34 @@ namespace Lab_i1
             double elapsedTime = timer.Elapsed.TotalMilliseconds;
             results.Add(elapsedTime);
 
+            if (radioButton3.Checked)
+            {
+                counterClicks3++;
+
+                if (counterClicks3 >= 3) // Третья серия требует 3 нажатия
+                {
+                    double avgTime = results.Average();
+                    results.Clear();
+                    counterClicks3 = 0;
+
+                    double ratio = (double)currentDistance / currentHeight; // S/D
+
+                    SaveResultsToFile(avgTime, currentDistance, currentWidth, currentHeight, ratio);
+
+                    counterD3++; // Переход к следующему D
+
+                    if (counterD3 >= D.Length) // Если все размеры пройдены, переходим к следующему S
+                    {
+                        counterD3 = 0;
+                        counterS3++;
+                    }
+                }
+
+                Start_3();
+                return;
+            }
+
+            // Обработка первых двух серий
             if (results.Count >= 5)
             {
                 var time = results.Average();
@@ -94,10 +129,6 @@ namespace Lab_i1
             {
                 Start_2();
             }
-            else if (radioButton3.Checked)
-            {
-
-            }
 
         }
 
@@ -130,7 +161,13 @@ namespace Lab_i1
                 }
                 else if (radioButton3.Checked)
                 {
+                    toolStripStatusLabel1.Text = "Выбрана третья серия экспериментов";
 
+                    counterClicks3 = 0;
+                    counterS3 = 0;
+                    counterD3 = 0;
+
+                    Start_3();
                 }
             }
 
@@ -152,8 +189,12 @@ namespace Lab_i1
 
             Cursor.Position = new Point(this.Left, this.Top);
 
-            targetRectangle.Location = RandPoint();
+            //Угол от 0 до  π / 2 для 4 - й четверти
+            double angle = random.NextDouble() * (Math.PI / 2);
+            int x = (int)(S[counterS] * Math.Cos(angle));
+            int y = (int)(S[counterS] * Math.Sin(angle));
 
+            targetRectangle.Location = new Point(x, y);
             targetRectangle.Visible = true;
 
             timer.Restart();
@@ -173,29 +214,76 @@ namespace Lab_i1
             textBox_distance.Text = FixDistance.ToString();
 
             currentHeight = D[counterD];
-            currentWidth = D[counterD * 2];
+            currentWidth = D[counterD] * 2;
 
             textBox_size.Text = currentHeight.ToString();
             textBox_size2.Text = currentWidth.ToString();
 
             Cursor.Position = new Point(this.Left, this.Top);
 
-            targetRectangle.Location = RandPoint();
+            //Угол от 0 до  π / 2 для 4 - й четверти
+            double angle = random.NextDouble() * (Math.PI / 2);
+            int x = (int)(FixDistance * Math.Cos(angle));
+            int y = (int)(FixDistance * Math.Sin(angle));
+
+            targetRectangle.Location = new Point(x,y); // меняем локацию
+            targetRectangle.Size = new Size(currentWidth, currentHeight); //меняем размер
 
             targetRectangle.Visible = true;
 
             timer.Restart();
         }
+        /// <summary>
+        /// старт третьей группы экспериментов
+        /// </summary>
+        private void Start_3()
+        {
+            if (counterS3 >= S.Length)
+            {
+                toolStripStatusLabel1.Text = $"Третья серия завершена. Данные записаны в файл {FilePath}";
+                return;
+            }
+
+            currentDistance = S[counterS3];
+            currentHeight = D[counterD3];
+            currentWidth = currentHeight * 2;
+
+            textBox_distance.Text = currentDistance.ToString();
+            textBox_size.Text = currentHeight.ToString();
+            textBox_size2.Text = currentWidth.ToString();
+
+            Cursor.Position = new Point(this.Left, this.Top);
+
+            // Генерируем случайный угол и вычисляем координаты
+            double angle = random.NextDouble() * (Math.PI / 2);
+            int x = (int)(currentDistance * Math.Cos(angle));
+            int y = (int)(currentDistance * Math.Sin(angle));
+
+            targetRectangle.Location = new Point(x, y);
+            targetRectangle.Size = new Size(currentWidth, currentHeight);
+            targetRectangle.Visible = true;
+
+            timer.Restart();
+        }
+
 
         /// <summary>
         /// Записывает результаты эксперимента в файл.
         /// </summary>
-        private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize)
+        private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize, double ratio = -1)
         {
             try
             {
                 using StreamWriter writer = File.AppendText(FilePath);
-                writer.WriteLine($"Дистанция: {distance}, Размер: {width} * {height}, Среднее время: {avgTime} мс");
+
+                if (ratio >= 0)
+                {
+                    writer.WriteLine($"Дистанция: {distance}\t Размер: {width} * {height}\t Отношение S/D: {ratio:F2}\t Среднее время: {avgTime:F2} мс");
+                }
+                else
+                {
+                    writer.WriteLine($"Дистанция: {distance}\t Размер: {width} * {height}\t Среднее время: {avgTime} мс");
+                }
             }
             catch (Exception ex)
             {
@@ -203,19 +291,5 @@ namespace Lab_i1
             }
         }
 
-
-        /// <summary>
-        /// размещает цель по дуге
-        /// </summary>
-        /// <returns></returns>
-        private Point RandPoint()
-        {
-            //Угол от 0 до  π / 2 для 4 - й четверти
-            double angle = random.NextDouble() * (Math.PI / 2);
-            int x = (int)(S[counterS] * Math.Cos(angle));
-            int y = (int)(S[counterS] * Math.Sin(angle));
-
-            return new Point(x, y);
-        }
     }
 }
