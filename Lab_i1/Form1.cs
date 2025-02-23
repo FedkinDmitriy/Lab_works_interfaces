@@ -277,26 +277,26 @@ namespace Lab_i1
         /// <summary>
         /// Записывает результаты эксперимента в файл.
         /// </summary>
-        private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize, double ratio = -1)
-        {
-            try
-            {
-                using StreamWriter writer = File.AppendText(FilePath);
+        //private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize, double ratio = -1)
+        //{
+        //    try
+        //    {
+        //        using StreamWriter writer = File.AppendText(FilePath);
 
-                if (ratio >= 0)
-                {
-                    writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Отношение S/D: {ratio:F2}\t , Среднее время: {avgTime} мс;");
-                }
-                else
-                {
-                    writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Среднее время: {avgTime} мс;");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка записи в файл: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        //        if (ratio >= 0)
+        //        {
+        //            writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Отношение S/D: {ratio:F2}\t , Среднее время: {avgTime} мс;");
+        //        }
+        //        else
+        //        {
+        //            writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Среднее время: {avgTime} мс;");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Ошибка записи в файл: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
@@ -328,6 +328,58 @@ namespace Lab_i1
             textBox_size2.ReadOnly = true;
             textBox_size2.TabStop = false;
             textBox_size2.Enabled = false;
+        }
+
+
+        /// <summary>
+        /// Записывает результаты эксперимента в два файла (txt и csv).
+        /// </summary>
+        private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize, double ratio = -1)
+        {
+            try
+            {
+                using StreamWriter writer = File.AppendText(FilePath);
+
+                if (ratio >= 0)
+                {
+                    writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Отношение S/D: {ratio:F2}\t , Среднее время: {avgTime} мс;");
+                }
+                else
+                {
+                    writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Среднее время: {avgTime} мс;");
+                }
+
+                // Запись в CSV файл
+
+                if (radioButton1.Checked)
+                {
+                    string csvFilePath1 = "results1.csv";
+                    using (StreamWriter csvWriter = new StreamWriter(csvFilePath1, true, System.Text.Encoding.UTF8))
+                    {
+                        csvWriter.WriteLine($"{distance};{height};{avgTime}");
+                    }
+                }
+                else if (radioButton2.Checked)
+                {
+                    string csvFilePath2 = "results2.csv";
+                    using (StreamWriter csvWriter = new StreamWriter(csvFilePath2, true, System.Text.Encoding.UTF8))
+                    {
+                        csvWriter.WriteLine($"{distance};{height};{avgTime}");
+                    }
+                }
+                else if (radioButton3.Checked)
+                {
+                    string csvFilePath3 = "results3.csv";
+                    using (StreamWriter csvWriter = new StreamWriter(csvFilePath3, true, System.Text.Encoding.UTF8))
+                    {
+                        csvWriter.WriteLine($"{distance};{height};{ratio};{avgTime}");
+                    }
+                }               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка записи в файл: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }
