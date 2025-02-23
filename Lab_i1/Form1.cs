@@ -1,5 +1,6 @@
 ﻿
 using System.Diagnostics;
+using System.Globalization;
 
 
 namespace Lab_i1
@@ -38,6 +39,7 @@ namespace Lab_i1
         public FormMain()
         {
             InitializeComponent();
+            SetTextBoxToReadOnly();
             this.KeyPreview = true; // Позволяет форме обрабатывать нажатия клавиш перед передачей элементам
             this.KeyDown += FormMain_KeyDown;
             this.MouseMove += FormMain_MouseMove; // отслеживание курсора
@@ -74,7 +76,8 @@ namespace Lab_i1
 
                 if (counterClicks3 >= 3) // Третья серия требует 3 нажатия
                 {
-                    double avgTime = results.Average();
+                    //double avgTime = results.Average();
+                    double avgTime = Math.Round(results.Average(), 2);
                     results.Clear();
                     counterClicks3 = 0;
 
@@ -98,14 +101,15 @@ namespace Lab_i1
             // Обработка первых двух серий
             if (results.Count >= 5)
             {
-                var time = results.Average();
+                //var time = results.Average();
+                double time = Math.Round(results.Average(), 2);
                 results.Clear();
 
                 if (radioButton1.Checked)
-                {                    
+                {
                     SaveResultsToFile(time, distance: currentDistance);
                 }
-                else if(radioButton2.Checked)
+                else if (radioButton2.Checked)
                 {
                     SaveResultsToFile(time, width: currentWidth, height: currentHeight);
                 }
@@ -143,7 +147,7 @@ namespace Lab_i1
                 if (radioButton1.Checked)
                 {
                     toolStripStatusLabel1.Text = "Выбрана первая серия экспериментов";
-                    
+
                     counterClicks = 0;
                     counterS = 0;
 
@@ -179,13 +183,14 @@ namespace Lab_i1
         {
             if (counterS >= S.Length)
             {
-                toolStripStatusLabel1.Text =  $"Первая серия завершена. Данные записаны в файл {FilePath}";
+                toolStripStatusLabel1.Text = $"Первая серия завершена. Данные записаны в файл {FilePath}";
+                System.Media.SystemSounds.Beep.Play();
                 return;
             }
             textBox_distance.Text = S[counterS].ToString();
             currentDistance = S[counterS];
-            textBox_size.Text = FixSize.ToString();
-            textBox_size2.Text = (FixSize * 2).ToString();
+            textBox_size2.Text = FixSize.ToString();
+            textBox_size.Text = (FixSize * 2).ToString();
 
             Cursor.Position = new Point(this.Left, this.Top);
 
@@ -208,6 +213,7 @@ namespace Lab_i1
             if (counterD >= D.Length)
             {
                 toolStripStatusLabel1.Text = $"Вторая серия завершена. Данные записаны в файл {FilePath}";
+                System.Media.SystemSounds.Beep.Play();
                 return;
             }
 
@@ -216,8 +222,8 @@ namespace Lab_i1
             currentHeight = D[counterD];
             currentWidth = D[counterD] * 2;
 
-            textBox_size.Text = currentHeight.ToString();
-            textBox_size2.Text = currentWidth.ToString();
+            textBox_size2.Text = currentHeight.ToString();
+            textBox_size.Text = currentWidth.ToString();
 
             Cursor.Position = new Point(this.Left, this.Top);
 
@@ -226,7 +232,7 @@ namespace Lab_i1
             int x = (int)(FixDistance * Math.Cos(angle));
             int y = (int)(FixDistance * Math.Sin(angle));
 
-            targetRectangle.Location = new Point(x,y); // меняем локацию
+            targetRectangle.Location = new Point(x, y); // меняем локацию
             targetRectangle.Size = new Size(currentWidth, currentHeight); //меняем размер
 
             targetRectangle.Visible = true;
@@ -241,6 +247,7 @@ namespace Lab_i1
             if (counterS3 >= S.Length)
             {
                 toolStripStatusLabel1.Text = $"Третья серия завершена. Данные записаны в файл {FilePath}";
+                System.Media.SystemSounds.Beep.Play();
                 return;
             }
 
@@ -278,17 +285,49 @@ namespace Lab_i1
 
                 if (ratio >= 0)
                 {
-                    writer.WriteLine($"Дистанция: {distance}\t Размер: {width} * {height}\t Отношение S/D: {ratio:F2}\t Среднее время: {avgTime:F2} мс");
+                    writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Отношение S/D: {ratio:F2}\t , Среднее время: {avgTime} мс;");
                 }
                 else
                 {
-                    writer.WriteLine($"Дистанция: {distance}\t Размер: {width} * {height}\t Среднее время: {avgTime} мс");
+                    writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Среднее время: {avgTime} мс;");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка записи в файл: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Вы уверены, что хотите выйти?", "Подтверждение", MessageBoxButtons.YesNo);
+            
+            if (result == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+
+        private void SetTextBoxToReadOnly()
+        {
+            // Для каждого TextBox, который должен быть только для чтения
+
+            textBox_counter.ReadOnly = true;
+            textBox_counter.TabStop = false;
+            textBox_counter.Enabled = false;
+
+            textBox_distance.ReadOnly = true;
+            textBox_distance.TabStop = false;
+            textBox_distance.Enabled = false;
+
+            textBox_size.ReadOnly = true;
+            textBox_size.TabStop = false;
+            textBox_size.Enabled = false;
+
+            textBox_size2.ReadOnly = true;
+            textBox_size2.TabStop = false;
+            textBox_size2.Enabled = false;
         }
 
     }

@@ -42,6 +42,7 @@
             textBox_counter = new TextBox();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
+            buttonClose = new Button();
             groupBox1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -49,6 +50,7 @@
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.GradientActiveCaption;
+            groupBox1.Controls.Add(buttonClose);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(textBox_size2);
             groupBox1.Controls.Add(radioButton3);
@@ -71,15 +73,15 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(25, 420);
+            label4.Location = new Point(7, 466);
             label4.Name = "label4";
-            label4.Size = new Size(43, 15);
+            label4.Size = new Size(47, 15);
             label4.TabIndex = 7;
-            label4.Text = "Height";
+            label4.Text = "Высота";
             // 
             // textBox_size2
             // 
-            textBox_size2.Location = new Point(110, 417);
+            textBox_size2.Location = new Point(110, 463);
             textBox_size2.Name = "textBox_size2";
             textBox_size2.Size = new Size(48, 23);
             textBox_size2.TabIndex = 6;
@@ -109,11 +111,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(25, 378);
+            label3.Location = new Point(7, 424);
             label3.Name = "label3";
-            label3.Size = new Size(39, 15);
+            label3.Size = new Size(52, 15);
             label3.TabIndex = 5;
-            label3.Text = "Width";
+            label3.Text = "Ширина";
             // 
             // radioButton1
             // 
@@ -128,7 +130,7 @@
             // 
             // textBox_size
             // 
-            textBox_size.Location = new Point(110, 375);
+            textBox_size.Location = new Point(110, 421);
             textBox_size.Name = "textBox_size";
             textBox_size.Size = new Size(48, 23);
             textBox_size.TabIndex = 4;
@@ -136,15 +138,15 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(25, 337);
+            label2.Location = new Point(7, 383);
             label2.Name = "label2";
-            label2.Size = new Size(13, 15);
+            label2.Size = new Size(70, 15);
             label2.TabIndex = 3;
-            label2.Text = "S";
+            label2.Text = "Расстояние";
             // 
             // textBox_distance
             // 
-            textBox_distance.Location = new Point(110, 329);
+            textBox_distance.Location = new Point(110, 375);
             textBox_distance.Name = "textBox_distance";
             textBox_distance.Size = new Size(48, 23);
             textBox_distance.TabIndex = 2;
@@ -152,15 +154,15 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(25, 463);
+            label1.Location = new Point(7, 509);
             label1.Name = "label1";
-            label1.Size = new Size(33, 15);
+            label1.Size = new Size(68, 15);
             label1.TabIndex = 1;
-            label1.Text = "Click";
+            label1.Text = "Попадание";
             // 
             // textBox_counter
             // 
-            textBox_counter.Location = new Point(110, 455);
+            textBox_counter.Location = new Point(110, 501);
             textBox_counter.Name = "textBox_counter";
             textBox_counter.Size = new Size(48, 23);
             textBox_counter.TabIndex = 0;
@@ -181,6 +183,17 @@
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             toolStripStatusLabel1.Size = new Size(250, 17);
             toolStripStatusLabel1.Text = "Выберите серию в меню и нажмите пробел";
+            // 
+            // buttonClose
+            // 
+            buttonClose.Cursor = Cursors.Hand;
+            buttonClose.Location = new Point(63, 550);
+            buttonClose.Name = "buttonClose";
+            buttonClose.Size = new Size(95, 32);
+            buttonClose.TabIndex = 8;
+            buttonClose.Text = "Выход";
+            buttonClose.UseVisualStyleBackColor = true;
+            buttonClose.Click += buttonClose_Click;
             // 
             // FormMain
             // 
@@ -217,5 +230,6 @@
         private ToolStripStatusLabel toolStripStatusLabel1;
         private Label label4;
         private TextBox textBox_size2;
+        private Button buttonClose;
     }
 }
