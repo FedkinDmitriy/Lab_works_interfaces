@@ -15,16 +15,17 @@ namespace Lab_i1
 
         int counterClicks = 0; // Количество попаданий
         int counterS = 0; // Индекс текущего расстояния
+        int counterD = 0; // Индекс текущего размера
         bool isMouseMoving = false; // флаг для курсора
 
         Stopwatch timer = new(); // Таймер для измерения времени
         Random random = new(); // Для случайного размещения по дуге
         List<double> results = new(); // Хранение времени попаданий
 
-        private readonly string FilePath = "results.txt"; // путь к файлу для первой серии
+        private readonly string FilePath = "results.txt";
 
         int currentDistance;
-        int currentWeidth;
+        int currentWidth;
         int currentHeight;
 
         public FormMain()
@@ -67,7 +68,11 @@ namespace Lab_i1
 
                 if (radioButton1.Checked)
                 {                    
-                    SaveResultsToFile(time, currentDistance);
+                    SaveResultsToFile(time, distance: currentDistance);
+                }
+                else if(radioButton2.Checked)
+                {
+                    SaveResultsToFile(time, width: currentWidth, height: currentHeight);
                 }
             }
 
@@ -78,9 +83,22 @@ namespace Lab_i1
             {
                 counterClicks = 0;
                 counterS++;
+                counterD++;
             }
 
-            Start_1();
+            if (radioButton1.Checked)
+            {
+                Start_1();
+            }
+            else if (radioButton2.Checked)
+            {
+                Start_2();
+            }
+            else if (radioButton3.Checked)
+            {
+
+            }
+
         }
 
         private void FormMain_KeyDown(object? sender, KeyEventArgs e)
@@ -103,7 +121,12 @@ namespace Lab_i1
                 }
                 else if (radioButton2.Checked)
                 {
+                    toolStripStatusLabel1.Text = "Выбрана вторая серия экспериментов";
 
+                    counterClicks = 0;
+                    counterD = 0;
+
+                    Start_2();
                 }
                 else if (radioButton3.Checked)
                 {
@@ -117,13 +140,11 @@ namespace Lab_i1
         /// </summary>
         private void Start_1()
         {
-
             if (counterS >= S.Length)
             {
                 toolStripStatusLabel1.Text =  $"Первая серия завершена. Данные записаны в файл {FilePath}";
                 return;
             }
-
             textBox_distance.Text = S[counterS].ToString();
             currentDistance = S[counterS];
             textBox_size.Text = FixSize.ToString();
@@ -131,13 +152,36 @@ namespace Lab_i1
 
             Cursor.Position = new Point(this.Left, this.Top);
 
-            //Угол от 0 до  π / 2 для 4 - й четверти
-            double angle = random.NextDouble() * (Math.PI / 2);
-            int x = (int)(S[counterS] * Math.Cos(angle));
-            int y = (int)(S[counterS] * Math.Sin(angle));
+            targetRectangle.Location = RandPoint();
 
+            targetRectangle.Visible = true;
 
-            targetRectangle.Location = new Point(x, y);
+            timer.Restart();
+        }
+        /// <summary>
+        /// старт второй серии экспериментов
+        /// </summary>
+        private void Start_2()
+        {
+
+            if (counterD >= D.Length)
+            {
+                toolStripStatusLabel1.Text = $"Вторая серия завершена. Данные записаны в файл {FilePath}";
+                return;
+            }
+
+            textBox_distance.Text = FixDistance.ToString();
+
+            currentHeight = D[counterD];
+            currentWidth = D[counterD * 2];
+
+            textBox_size.Text = currentHeight.ToString();
+            textBox_size2.Text = currentWidth.ToString();
+
+            Cursor.Position = new Point(this.Left, this.Top);
+
+            targetRectangle.Location = RandPoint();
+
             targetRectangle.Visible = true;
 
             timer.Restart();
@@ -159,5 +203,19 @@ namespace Lab_i1
             }
         }
 
+
+        /// <summary>
+        /// размещает цель по дуге
+        /// </summary>
+        /// <returns></returns>
+        private Point RandPoint()
+        {
+            //Угол от 0 до  π / 2 для 4 - й четверти
+            double angle = random.NextDouble() * (Math.PI / 2);
+            int x = (int)(S[counterS] * Math.Cos(angle));
+            int y = (int)(S[counterS] * Math.Sin(angle));
+
+            return new Point(x, y);
+        }
     }
 }
