@@ -273,31 +273,6 @@ namespace Lab_i1
             timer.Restart();
         }
 
-
-        /// <summary>
-        /// Записывает результаты эксперимента в файл.
-        /// </summary>
-        //private void SaveResultsToFile(double avgTime, int distance = FixDistance, int width = FixSize * 2, int height = FixSize, double ratio = -1)
-        //{
-        //    try
-        //    {
-        //        using StreamWriter writer = File.AppendText(FilePath);
-
-        //        if (ratio >= 0)
-        //        {
-        //            writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Отношение S/D: {ratio:F2}\t , Среднее время: {avgTime} мс;");
-        //        }
-        //        else
-        //        {
-        //            writer.WriteLine($"Дистанция: {distance}\t , Размер: {width} * {height}\t , Среднее время: {avgTime} мс;");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Ошибка записи в файл: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
-
         private void buttonClose_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Вы уверены, что хотите выйти?", "Подтверждение", MessageBoxButtons.YesNo);
@@ -307,7 +282,6 @@ namespace Lab_i1
                 Application.Exit();
             }
         }
-
 
         private void SetTextBoxToReadOnly()
         {
