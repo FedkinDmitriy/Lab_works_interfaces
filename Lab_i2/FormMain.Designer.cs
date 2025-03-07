@@ -30,11 +30,11 @@
         {
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            label1 = new Label();
             label_time1 = new Label();
             labelCurrentItem = new Label();
             buttonRun = new Button();
             tabPage2 = new TabPage();
-            label1 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             SuspendLayout();
@@ -64,11 +64,20 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Первая группа опытов";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(539, 246);
+            label1.Name = "label1";
+            label1.Size = new Size(72, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Время в мс.";
+            // 
             // label_time1
             // 
             label_time1.AutoSize = true;
             label_time1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label_time1.Location = new Point(692, 241);
+            label_time1.Location = new Point(670, 240);
             label_time1.Name = "label_time1";
             label_time1.Size = new Size(19, 21);
             label_time1.TabIndex = 3;
@@ -78,7 +87,7 @@
             // 
             labelCurrentItem.AutoSize = true;
             labelCurrentItem.Font = new Font("Segoe UI Semibold", 48F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelCurrentItem.Location = new Point(561, 38);
+            labelCurrentItem.Location = new Point(539, 37);
             labelCurrentItem.Name = "labelCurrentItem";
             labelCurrentItem.Size = new Size(73, 86);
             labelCurrentItem.TabIndex = 2;
@@ -87,7 +96,7 @@
             // buttonRun
             // 
             buttonRun.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            buttonRun.Location = new Point(561, 400);
+            buttonRun.Location = new Point(539, 399);
             buttonRun.Name = "buttonRun";
             buttonRun.Size = new Size(150, 50);
             buttonRun.TabIndex = 1;
@@ -105,15 +114,6 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "tabPage2";
             tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(561, 247);
-            label1.Name = "label1";
-            label1.Size = new Size(72, 15);
-            label1.TabIndex = 4;
-            label1.Text = "Время в мс.";
             // 
             // FormMain
             // 
