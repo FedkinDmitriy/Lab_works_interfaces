@@ -35,6 +35,7 @@
             labelCurrentItem = new Label();
             buttonRun = new Button();
             tabPage2 = new TabPage();
+            label3 = new Label();
             button_reset = new Button();
             flowLayoutPanel2 = new FlowLayoutPanel();
             radioButton_back = new RadioButton();
@@ -124,6 +125,7 @@
             // tabPage2
             // 
             tabPage2.BackColor = SystemColors.GradientInactiveCaption;
+            tabPage2.Controls.Add(label3);
             tabPage2.Controls.Add(button_reset);
             tabPage2.Controls.Add(flowLayoutPanel2);
             tabPage2.Controls.Add(flowLayoutPanel1);
@@ -137,9 +139,21 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Вторая группа опытов";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = SystemColors.GradientActiveCaption;
+            label3.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label3.Location = new Point(149, 16);
+            label3.Name = "label3";
+            label3.Size = new Size(615, 17);
+            label3.TabIndex = 6;
+            label3.Text = "Для корректной работы теста после смены параметров нажмите \"сброс\", а только потом \"run\"";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // button_reset
             // 
-            button_reset.Location = new Point(632, 137);
+            button_reset.Location = new Point(632, 163);
             button_reset.Name = "button_reset";
             button_reset.Size = new Size(132, 50);
             button_reset.TabIndex = 5;
@@ -151,7 +165,7 @@
             // 
             flowLayoutPanel2.Controls.Add(radioButton_back);
             flowLayoutPanel2.Controls.Add(radioButton_font);
-            flowLayoutPanel2.Location = new Point(632, 21);
+            flowLayoutPanel2.Location = new Point(632, 47);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
             flowLayoutPanel2.Size = new Size(132, 110);
             flowLayoutPanel2.TabIndex = 4;
@@ -184,7 +198,7 @@
             flowLayoutPanel1.Controls.Add(radioButton_red);
             flowLayoutPanel1.Controls.Add(radioButton_green);
             flowLayoutPanel1.Controls.Add(radioButton_yellow);
-            flowLayoutPanel1.Location = new Point(494, 21);
+            flowLayoutPanel1.Location = new Point(494, 47);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(132, 110);
             flowLayoutPanel1.TabIndex = 3;
@@ -309,5 +323,6 @@
         private RadioButton radioButton_back;
         private RadioButton radioButton_font;
         private Button button_reset;
+        private Label label3;
     }
 }

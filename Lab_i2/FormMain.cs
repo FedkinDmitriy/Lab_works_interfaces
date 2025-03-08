@@ -22,7 +22,7 @@ namespace Lab_i2
 
 
         //****************************2 группа*************************//
-        Color[] colors = [Color.Black, Color.Yellow, Color.Green, Color.Red]; // массив цветов, исключая заданный цвет шрифта (синий) и панели (белый)
+        //Color[] colors = [Color.Black, Color.Yellow, Color.Green, Color.Red]; // массив цветов, исключая заданный цвет шрифта (синий) и панели (белый)
         Panel[] arrPanel2 = new Panel[9]; // для второй группы
         bool isSelected2 = false;
         int countClick2 = 0; // для подсчёта попаданий для второй группы
@@ -32,7 +32,7 @@ namespace Lab_i2
         private readonly string txtFilePath2 = "results2.txt";
         private readonly string csvFilePath2 = "results2.csv";
 
-        Color currentColorBack = Color.White, currentColorFont = Color.Blue;
+        Color currentColorBack = Color.White, currentColorFont = Color.Blue; // для коректной записи в файл
 
         public FormMain()
         {
@@ -362,38 +362,26 @@ namespace Lab_i2
                     {
                         isSelected2 = true;
                         countClick2++;
-
+                        ActionAfterClick();
                     }
                     else if (radioButton_red.Checked && !isSelected2 && panel.BackColor == Color.Red)
                     {
                         isSelected2 = true;
                         countClick2++;
+                        ActionAfterClick();
                     }
                     else if (radioButton_green.Checked && !isSelected2 && panel.BackColor == Color.Green)
                     {
                         isSelected2 = true;
                         countClick2++;
+                        ActionAfterClick();
                     }
                     else if (radioButton_yellow.Checked && !isSelected2 && panel.BackColor == Color.Yellow)
                     {
                         isSelected2 = true;
                         countClick2++;
+                        ActionAfterClick();
                     }
-
-                    Cursor.Position = new Point(cX, cY);
-                    sw2.Stop();
-                    double res = sw2.Elapsed.TotalMilliseconds;
-
-                    label_time2.Text = res.ToString("F2");
-
-                    averageTime2.Add(res);
-                    if (averageTime2.Count >= 5)
-                    {
-                        double avg = averageTime2.Average();
-                        SaveResultsToFile2(Math.Round(avg, 2), quantityPanel2, txtFilePath2, csvFilePath2);
-                        averageTime2.Clear();
-                    }
-                    sw2.Reset();
 
                 }
 
@@ -408,39 +396,26 @@ namespace Lab_i2
                         {
                             isSelected2 = true;
                             countClick2++;
-
+                            ActionAfterClick();
                         }
                         else if (radioButton_red.Checked && !isSelected2 && label.ForeColor == Color.Red)
                         {
                             isSelected2 = true;
                             countClick2++;
+                            ActionAfterClick();
                         }
                         else if (radioButton_green.Checked && !isSelected2 && label.ForeColor == Color.Green)
                         {
                             isSelected2 = true;
                             countClick2++;
+                            ActionAfterClick();
                         }
                         else if (radioButton_yellow.Checked && !isSelected2 && label.ForeColor == Color.Yellow)
                         {
                             isSelected2 = true;
                             countClick2++;
+                            ActionAfterClick();
                         }
-
-                        Cursor.Position = new Point(cX, cY);
-                        sw2.Stop();
-                        double res = sw2.Elapsed.TotalMilliseconds;
-
-                        label_time2.Text = res.ToString("F2");
-
-                        averageTime2.Add(res);
-                        if (averageTime2.Count >= 5)
-                        {
-                            double avg = averageTime2.Average();
-                            SaveResultsToFile2(Math.Round(avg, 2), quantityPanel2, txtFilePath2, csvFilePath2);
-                            averageTime2.Clear();
-                        }
-                        sw2.Reset();
-
                     }
                 }
             }
@@ -545,6 +520,7 @@ namespace Lab_i2
             countClick2 = 0;
             quantityPanel2 = 2;
             isSelected2 = false;
+            sw2.Reset();
 
             foreach (var panel in arrPanel2)
             {
@@ -572,6 +548,24 @@ namespace Lab_i2
             {
                 MessageBox.Show($"Ошибка записи в файл: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        void ActionAfterClick()
+        {
+            Cursor.Position = new Point(cX, cY);
+            sw2.Stop();
+            double res = sw2.Elapsed.TotalMilliseconds;
+
+            label_time2.Text = res.ToString("F2");
+
+            averageTime2.Add(res);
+            if (averageTime2.Count >= 5)
+            {
+                double avg = averageTime2.Average();
+                SaveResultsToFile2(Math.Round(avg, 2), quantityPanel2, txtFilePath2, csvFilePath2);
+                averageTime2.Clear();
+            }
+            sw2.Reset();
         }
     }
 }
